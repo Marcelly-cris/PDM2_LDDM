@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - To-Do List</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    <input type="text" id="username" placeholder="Usuário" />
+    <input type="password" id="password" placeholder="Senha" />
+    <button id="loginBtn">Entrar</button>
+    <button id="goRegisterBtn">Registrar</button>
+  </div>
+
+  <script>
+    async function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert('Preencha usuário e senha');
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:5000/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.error || 'Erro no login');
+          return;
+        }
+
+        // Salva o token JWT no localStorage
+        localStorage.setItem('token', data.token);
+        alert('Login realizado com sucesso!');
+        // Redireciona para a página principal
+        window.location.href = 'index.html';
+      } catch (err) {
+        alert('Erro de rede');
+        console.error(err);
+      }
+    }
+
+    document.getElementById('loginBtn').onclick = login;
+    document.getElementById('goRegisterBtn').onclick = () => {
+      window.location.href = 'register.html';
+    };
+  </script>
+</body>
+</html>

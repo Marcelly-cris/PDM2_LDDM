@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>To-Do Kanban</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="kanban-page">
+  <header class="navbar">
+    <h1>Meu Kanban</h1>
+    <button id="logoutBtn">Sair</button>
+  </header>
+
+  <main class="main-board">
+    <div class="new-task-form">
+      <input type="text" id="newTask" placeholder="Digite uma nova tarefa..." />
+      <button id="addBtn">Adicionar</button>
+    </div>
+
+    <div class="kanban-board">
+      <div class="kanban-column" id="todo">
+        <h2>A Fazer</h2>
+        <ul class="task-list" id="todoList"></ul>
+      </div>
+      <div class="kanban-column" id="in_progress">
+        <h2>Em Progresso</h2>
+        <ul class="task-list" id="inProgressList"></ul>
+      </div>
+      <div class="kanban-column" id="done">
+        <h2>Concluído</h2>
+        <ul class="task-list" id="doneList"></ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
