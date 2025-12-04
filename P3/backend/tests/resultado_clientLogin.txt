@@ -1,0 +1,3 @@
+Teste de login do cliente: Aprovado
+Teste de login do cliente: Aprovado
+Teste de login do cliente: Reprovado

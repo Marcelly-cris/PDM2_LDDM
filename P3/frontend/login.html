@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login</title>
+
+<script>
+    async function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert('Preencha usuário e senha');
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:5000/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.error || 'Erro no login');
+          return;
+        }
+
+        localStorage.setItem('token', data.token);
+        alert('Login realizado com sucesso!');
+        window.location.href = 'index.html';
+
+      } catch (err) {
+        alert('Erro de rede');
+        console.error(err);
+      }
+    }
+</script>
+
+<style>
+  * {
+    box-sizing: border-box; /* garante tamanhos uniformes */
+  }
+
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#000;
+    font-family:'Orbitron',sans-serif;
+    color:#e0faff;
+  }
+
+  .login-card{
+    background:#0a0a0a;
+    padding:28px;
+    border-radius:14px;
+    text-align:center;
+    border:1px solid rgba(0,255,255,0.3);
+    box-shadow:0 0 20px rgba(0,255,255,0.3);
+    width:360px;
+  }
+
+  .logo{
+    font-size:40px;
+    color:#00eaff;
+    margin-bottom:10px;
+  }
+
+  input{
+    width:100%;
+    padding:12px;
+    margin-bottom:14px;
+    background:#000;
+    border:1px solid #00eaff;
+    color:#e0faff;
+    border-radius:8px;
+    font-size:15px;
+  }
+
+  button{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:15px; /* mesmo tamanho das labels */
+    display:block;
+  }
+
+  .neon{
+    background:linear-gradient(90deg,#7f00ff,#00eaff);
+    border:none;
+    color:white;
+    margin-bottom:12px;
+  }
+
+  .alt{
+    background:#0a0a0a;
+    border:1px solid #555;
+    color:#a5f3fc;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="login-card">
+  <div class="logo">⚡</div>
+
+  <input id="username" placeholder="Usuário" />
+  <input id="password" placeholder="Senha" type="password" />
+
+  <button class="neon" id="loginBtn" onclick="login()">ENTRAR</button>
+  <button class="alt" onclick="location.href='register.html'">Registrar</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

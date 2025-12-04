@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>To-Do Kanban</title>
+
+  <style>
+    :root{
+      --bg:#000000;
+      --text:#e0faff;
+
+      /* Cores neon iguais ao login */
+      --neon-cyan:#00eaff;
+      --neon-purple:#7f00ff;
+      --neon-purple-light:#a855f7;
+      --card:#0a0a0a;
+      --card-light:#111111;
+      --accent:#d946ef;
+      --accent-dark:#a419c6;
+      --done:#333333;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      background:#000;
+      color:var(--text);
+      font-family:"Orbitron", sans-serif;
+    }
+
+    /* NAVBAR */
+    .navbar{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#0a0a0a;
+      padding:22px;
+      border-bottom:1px solid rgba(0,255,255,0.3);
+      box-shadow:0 0 18px rgba(0,255,255,0.25);
+    }
+
+    .navbar-title{
+      font-size:28px;
+      letter-spacing:2px;
+      font-weight:800;
+      color:var(--neon-cyan);
+      text-shadow:0 0 12px var(--neon-cyan);
+    }
+
+    /* BOTÃO SAIR */
+    #logoutBtn{
+      position:fixed;
+      bottom:20px;
+      left:20px;
+      background:linear-gradient(90deg,var(--neon-purple),var(--neon-cyan));
+      color:white;
+      border:none;
+      padding:12px 18px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      z-index:999;
+      box-shadow:0 0 18px rgba(0,255,255,0.35);
+      transition:0.2s;
+    }
+
+    #logoutBtn:hover{
+      transform:scale(1.05);
+    }
+
+    /* ÁREA PRINCIPAL */
+    .main-board{
+      padding:28px;
+      margin-top:6%;
+      display:flex;
+      justify-content:center;
+    }
+
+    .kanban-board{
+      display:flex;
+      gap:30px;
+      justify-content:center;
+      width:100%;
+      max-width:1300px;
+    }
+
+    /* COLUNAS */
+    .kanban-column{
+      background:#0a0a0a;
+      padding:18px;
+      border-radius:12px;
+      width:30%;
+      border:1px solid rgba(0,255,255,0.25);
+      box-shadow:0 0 20px rgba(0,255,255,0.15);
+      min-height:420px;
+    }
+
+    .kanban-column h2{
+      margin:0 0 18px 0;
+      font-size:20px;
+      color:var(--neon-cyan);
+      text-shadow:0 0 10px var(--neon-cyan);
+      font-weight:700;
+      text-align:center;
+    }
+
+    /* FORMULÁRIO */
+    .new-task-inside{
+      background:#111;
+      padding:14px;
+      border-radius:10px;
+      margin-bottom:18px;
+      border:1px solid rgba(0,255,255,0.25);
+      box-shadow:0 0 15px rgba(0,255,255,0.08);
+    }
+
+    .new-task-inside input{
+      padding:12px;
+      background:#000;
+      border:1px solid var(--neon-cyan);
+      border-radius:8px;
+      color:var(--text);
+      margin-bottom:10px;
+    }
+
+    .new-task-inside button{
+      background:linear-gradient(90deg,var(--neon-purple),var(--neon-cyan));
+      color:white;
+      border:none;
+      padding:12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow:0 0 14px rgba(0,255,255,0.4);
+      transition:0.2s;
+    }
+
+    .new-task-inside button:hover{
+      transform:scale(1.03);
+    }
+
+    /* LISTA DE TAREFAS */
+    .task-list{
+      list-style:none;
+      padding:0;
+      margin:0;
+      min-height:100px;
+    }
+
+    .task-list li{
+      background:linear-gradient(90deg,var(--accent-dark),var(--accent));
+      color:white;
+      border-left:6px solid var(--neon-purple-light);
+      padding:14px;
+      margin-bottom:14px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:grab;
+      box-shadow:0 0 12px rgba(216,70,239,0.25);
+      transition:0.2s;
+    }
+
+    .task-list li:hover{
+      transform:scale(1.02);
+    }
+
+    .task-list li.in-progress{
+      background:linear-gradient(90deg,var(--neon-purple),var(--neon-cyan));
+      border-left-color:var(--neon-cyan);
+    }
+
+    .task-list li.done{
+      background:var(--done);
+      color:#bbb;
+      text-decoration:line-through;
+      border-left-color:#666;
+      box-shadow:none;
+    }
+  </style>
+</head>
+
+<body class="kanban-page">
+
+  <header class="navbar">
+    <div class="navbar-title">Quadro Kanban</div>
+  </header>
+
+  <button id="logoutBtn">Sair</button>
+
+  <main class="main-board">
+    <div class="kanban-board">
+
+      <!-- COLUNA A FAZER -->
+      <div class="kanban-column" id="todo">
+        <h2>A Fazer</h2>
+        <div class="new-task-inside">
+          <input type="text" id="newTask" placeholder="Digite uma nova tarefa..." />
+          <button id="addBtn">Adicionar</button>
+        </div>
+        <ul class="task-list" id="todoList"></ul>
+      </div>
+
+      <!-- COLUNA EM PROGRESSO -->
+      <div class="kanban-column" id="in_progress">
+        <h2>Em Progresso</h2>
+        <ul class="task-list" id="inProgressList"></ul>
+      </div>
+
+      <!-- COLUNA CONCLUÍDO -->
+      <div class="kanban-column" id="done">
+        <h2>Concluído</h2>
+        <ul class="task-list" id="doneList"></ul>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

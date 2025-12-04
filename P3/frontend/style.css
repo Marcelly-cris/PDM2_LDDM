@@ -1,0 +1,25 @@
+/* register.css — Pastel coerente (rosa, verde, azul suave) */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&display=swap');
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff5f7,#eefaff)}
+
+
+.reg-card{width:100%;max-width:420px;padding:28px;border-radius:20px;background:#ffffff;box-shadow:0 12px 32px rgba(0,0,0,0.06);font-family:Comfortaa,Arial,sans-serif;border:2px solid #f2e8f5}
+.reg-card h1{text-align:center;color:#5c6680;margin-bottom:20px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #d8e2ec;margin-top:6px;margin-bottom:14px;background:#f9fbfd}
+button.primary{width:100%;padding:14px;border-radius:12px;border:none;background:#86efac;color:#064e3b;font-weight:700}
+button.link{width:100%;padding:12px;border:2px dashed #c7dce8;background:transparent;border-radius:10px;color:#5c748a;margin-top:8px}
+
+/* register.css */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&display=swap');
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff7f3,#f3fbff)}
+.reg-card{width:100%;max-width:420px;padding:26px;border-radius:18px;background:linear-gradient(180deg,#fff,#f9fdff);box-shadow:0 12px 30px rgba(50,80,120,0.06);font-family:Comfortaa, Arial, sans-serif}
+.reg-card h1{text-align:center;color:#5a6b86;margin-bottom:18px}
+label{display:block;font-size:14px;color:#6b7a90;margin-bottom:10px}
+input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #e0e7ef;margin-top:6px;margin-bottom:14px}
+button.primary{width:100%;padding:14px;border-radius:12px;border:none;background:#7dd3a6;color:#073; font-weight:700}
+button.link{width:100%;padding:12px;margin-top:8px;border-radius:10px;border:2px dashed #cfe7f5;background:transparent}
+
+
+@media(max-width:480px){.reg-card{padding:18px}}
