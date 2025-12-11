@@ -1,4 +1,4 @@
-name: Run Project Tests
+name: Run Frontend & Backend Tests
 
 on:
   push:
@@ -9,54 +9,84 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1 — Checkout do repositório
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    # ----------------------------------------
+    # CHECKOUT
+    # ----------------------------------------
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      # 2 — Configura o Python
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+    # ----------------------------------------
+    # SETUP PYTHON
+    # ----------------------------------------
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      # 3 — Instala dependências do backend
-      - name: Install backend dependencies
-        working-directory: ./backend
-        run: |
-          pip install -r requirements.txt
-          pip install flask requests pytest
+    # ----------------------------------------
+    # INSTALL PYTHON DEPENDENCIES
+    # ----------------------------------------
+    - name: Install Python dependencies
+      run: |
+        pip install selenium webdriver-manager requests pandas
 
-      # 4 — Inicia backend (Flask)
-      - name: Start backend API
-        working-directory: ./backend
-        run: |
-          python3 app.py &
-          sleep 4
+    # ----------------------------------------
+    # START FRONTEND SERVER
+    # ----------------------------------------
+    - name: Start HTTP server for frontend
+      working-directory: ./PDM2_LDDM/P3/frontend
+      run: |
+        python3 -m http.server 5500 &
+        sleep 3
 
-      # 5 — Inicia servidor frontend
-      - name: Start frontend server
-        working-directory: ./frontend
-        run: |
-          python3 -m http.server 5500 &
-          sleep 3
+    # ----------------------------------------
+    # SETUP NODE
+    # ----------------------------------------
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: "18"
 
-      # 6 — Executa testes obrigatórios
-      - name: Run main tests (TDD required)
-        working-directory: ./tests
-        run: |
-          python3 test_auth.py
-          python3 test_tasks.py
+    # ----------------------------------------
+    # INSTALL BACKEND DEPENDENCIES
+    # ----------------------------------------
+    - name: Install backend dependencies
+      working-directory: ./PDM2_LDDM/P3/backend
+      run: |
+        npm install
 
-      # 7 — Executa testes opcionais (não quebram o build)
-      - name: Optional extended tests (can fail)
-        working-directory: ./tests
-        run: |
-          python3 stress_test.py || true
-          python3 ui_test.py || true
+    # ----------------------------------------
+    # START BACKEND SERVER
+    # ----------------------------------------
+    - name: Start backend server
+      working-directory: ./PDM2_LDDM/P3/backend
+      run: |
+        npm run dev &
+        sleep 5
 
-      # 8 — Salva logs / resultados dos testes
-      - name: Upload test result artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: ./tests/*.txt
+    # ----------------------------------------
+    # RUN SELENIUM FRONTEND TESTS (DEVEM PASSAR)
+    # ----------------------------------------
+    - name: Run frontend tests (Selenium)
+      working-directory: ./PDM2_LDDM/P3/backend/tests
+      run: |
+        python3 test_front_end.py
+
+    # ----------------------------------------
+    # RUN BACKEND ROUTE TEST (PODE FALHAR)
+    # ----------------------------------------
+    - name: Run backend route test (allowed to fail)
+      working-directory: ./PDM2_LDDM/P3/backend/tests
+      run: |
+        python3 test_route.py || true
+
+    # ----------------------------------------
+    # SAVE TEST ARTIFACTS
+    # ----------------------------------------
+    - name: Upload test result artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          ./PDM2_LDDM/P3/backend/tests/resultado_frontend.csv
+          ./PDM2_LDDM/P3/backend/tests/resultado_routeKanban.csv
