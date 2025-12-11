@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Interface para req.user contendo userId, username e role
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: {
     userId: number;
     username: string;
