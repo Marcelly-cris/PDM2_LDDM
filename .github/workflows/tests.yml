@@ -9,94 +9,62 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # ----------------------------------------
-    # CHECKOUT
-    # ----------------------------------------
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # ----------------------------------------
-    # DEBUG - LISTAR ARQUIVOS
-    # ----------------------------------------
     - name: Debug - listar arquivos
       run: |
         echo "=== LISTA DE ARQUIVOS DO REPOSITÓRIO ==="
         ls -R .
 
-    # ----------------------------------------
-    # SETUP PYTHON
-    # ----------------------------------------
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.10"
 
-    # ----------------------------------------
-    # INSTALL PYTHON DEPENDENCIES
-    # ----------------------------------------
     - name: Install Python dependencies
       run: |
         pip install selenium webdriver-manager requests pandas
 
     # ----------------------------------------
-    # START FRONTEND SERVER
+    # START FRONTEND SERVER (CORRIGIDO)
     # ----------------------------------------
     - name: Start HTTP server for frontend
-      working-directory: PDM2_LDDM/P3/frontend
+      working-directory: ./P3/frontend
       run: |
         python3 -m http.server 5500 &
         sleep 3
 
-    # ----------------------------------------
-    # SETUP NODE
-    # ----------------------------------------
     - name: Set up Node
       uses: actions/setup-node@v4
       with:
         node-version: "18"
 
-    # ----------------------------------------
-    # INSTALL BACKEND DEPENDENCIES
-    # ----------------------------------------
     - name: Install backend dependencies
-      working-directory: PDM2_LDDM/P3/backend
+      working-directory: ./P3/backend
       run: |
         npm install
 
-    # ----------------------------------------
-    # START BACKEND SERVER
-    # ----------------------------------------
     - name: Start backend server
-      working-directory: PDM2_LDDM/P3/backend
+      working-directory: ./P3/backend
       run: |
         npm run dev &
         sleep 5
 
-    # ----------------------------------------
-    # RUN SELENIUM FRONTEND TESTS
-    # ----------------------------------------
-    - name: Run frontend tests (Selenium)
-      working-directory: PDM2_LDDM/P3/backend/tests
+    - name: Run frontend tests
+      working-directory: ./P3/backend/tests
       run: |
         python3 test_front_end.py
 
-    # ----------------------------------------
-    # RUN BACKEND ROUTE TEST (ALLOW FAIL)
-    # ----------------------------------------
     - name: Run backend route test (allowed to fail)
-      working-directory: PDM2_LDDM/P3/backend/tests
+      working-directory: ./P3/backend/tests
       run: |
         python3 test_route.py || true
 
-    # ----------------------------------------
-    # SAVE TEST ARTIFACTS
-    # ----------------------------------------
     - name: Upload test result artifacts
       uses: actions/upload-artifact@v4
       with:
         name: test-results
         path: |
-          PDM2_LDDM/P3/backend/tests/resultado_frontend.csv
-          PDM2_LDDM/P3/backend/tests/resultado_routeKanban.csv
-          PDM2_LDDM/P3/frontend
-
+          ./P3/backend/tests/resultado_frontend.csv
+          ./P3/backend/tests/resultado_routeKanban.csv
